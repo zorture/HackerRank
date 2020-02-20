@@ -13,13 +13,12 @@ enum Direction {
     case Left
     case Up
     case Right
-    case Stop
-
 }
 
 struct MatrixRange {
-    let min: Int?
-    let max: Int?
+    var min: Int = 0
+    var max: Int = 0
+    
 }
 
 class MatrixRotation: BaseClass {
@@ -30,11 +29,13 @@ class MatrixRotation: BaseClass {
         //let ar = [[1,2,3],[4,5,6],[7,8,9]]
         //let ar = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
         let obj = MatrixRotation()
-        //let rowRange = MatrixRange(min: 0, max: obj.matrix.count)
-        //let colRange = MatrixRange(min: 0, max: obj.matrix.first?.count ?? 0)
-        let node1 = obj.createLinkList(rowCount: obj.matrix.count, colCount: obj.matrix.first?.count ?? 0)
-        
-        //let node2 = obj.createLinkList(matrix: ar, rowCount: <#T##Int#>, colCount: <#T##Int#>)
+        let rowRange = MatrixRange(min: 0, max: obj.matrix.count)
+        let colRange = MatrixRange(min: 0, max: obj.matrix.first?.count ?? 0)
+        let node1 = obj.createLinkList(rowRange: rowRange, colRange: colRange)
+        print("\n\n\n")
+        let rowRange2 = MatrixRange(min: 1, max: obj.matrix.count-1)
+        let colRange2 = MatrixRange(min: 1, max: obj.matrix.first!.count - 1 ?? 0)
+        let node2 = obj.createLinkList(rowRange: rowRange2, colRange: colRange2)
     }
     // Complete the matrixRotation function below.
     func matrixRotation(matrix: [[Int]], r: Int) -> Void {
@@ -43,15 +44,14 @@ class MatrixRotation: BaseClass {
     }
 
     
-    func createLinkList(rowCount: Int, colCount: Int) -> Node? {
+    func createLinkList(rowRange: MatrixRange, colRange: MatrixRange) -> Node? {
         
         var rootNode: Node?
         var tempNode: Node?
-        //let rowCount = matrix.count
-        //var colCount = matrix.first?.count ?? 0
         var condition = true
-        var counterRow = 0
-        var counterCol = 0
+        var counterRow = rowRange.min
+        var counterCol = colRange.min
+        direction = .Down
         while condition {
             
             let node = Node()
@@ -67,35 +67,33 @@ class MatrixRotation: BaseClass {
             
             switch direction {
             case .Down:
-                if counterRow < rowCount - 1 {
+                if counterRow < rowRange.max - 1 {
                     counterRow += 1
                 } else {
                     counterCol += 1
                     direction = .Left
                 }
             case .Left:
-                if counterCol < colCount - 1 {
+                if counterCol < colRange.max - 1 {
                     counterCol += 1
                 } else {
                     counterRow -= 1
                     direction = .Up
                 }
             case .Up:
-                if counterRow > 0 {
+                if counterRow > rowRange.min {
                     counterRow -= 1
                 } else {
                     counterCol -= 1
                     direction = .Right
                 }
             case .Right:
-                if counterCol > 1 {
+                if counterCol > colRange.min + 1 {
                     counterCol -= 1
                 } else {
-                    direction = .Stop
+                    direction = .Down
                     condition = false
                 }
-            case .Stop:
-                condition = false
             }
         }
         return rootNode
