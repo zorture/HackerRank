@@ -10,8 +10,8 @@ import Foundation
 
 //print("Please enter M x N matrix with the no of Rotation")
 //print("3 3 2")
-let m = 4
-let n = 5
+let m = 10
+let n = 20
 var no = 1
 var matrix = Array(repeating: Array(repeating: 0, count: n), count: m)
 
@@ -24,7 +24,7 @@ enum RotationDirection {
 
 func matrixRotation(matrix: [[Int]], r: Int) -> Void {
     let m = matrix.count
-    let n = matrix[0].count
+    var n = matrix[0].count
     var run = max(m, n)
     run = run/2
     printMatrix(matrix: matrix)
@@ -34,64 +34,102 @@ func matrixRotation(matrix: [[Int]], r: Int) -> Void {
     var tempStore = 0
     let loop = (r*4)
     for k in 0..<run{
+        n = matrix[k].count
         for _ in 0..<loop{
             switch direction{
             case .Up:
-                for i in (k...m-2-k).reversed() {
-                    let nextUp = i
-                    tempStore = matrix[nextUp][n-1-k]
-                    matrix[nextUp][n-1-k] = shiftNo
-                    shiftNo = tempStore
-                    //printMatrix(matrix: matrix)
-                    if i == k {
-                        direction = .Left
+                let low = k
+                let up = m-2-k
+                if low<=up{
+                    for i in (low...up).reversed() {
+                        let nextUp = i
+                        if shiftNo > -1{
+                            tempStore = matrix[nextUp][n-1-k]
+                            matrix[nextUp][n-1-k] = shiftNo
+                            shiftNo = tempStore
+                        }else{
+                            shiftNo = matrix[i][k]
+                        }
+                        //printMatrix(matrix: matrix)
+                        if i == k {
+                            direction = .Left
+                        }
                     }
+                }
+                else{
+                    direction = .Left
                 }
                 break
             case .Down:
-                for i in k..<m-k{
-                    let nextDown = i
-                    if shiftNo > -1{
-                        tempStore = matrix[nextDown][k]
-                        matrix[nextDown][k] = shiftNo
-                        shiftNo = tempStore
-                    }else{
-                        shiftNo = matrix[i][k]
+                let low = k
+                let up = m-k
+                if low<=up{
+                    for i in low..<up{
+                        let nextDown = i
+                        if shiftNo > -1{
+                            tempStore = matrix[nextDown][k]
+                            matrix[nextDown][k] = shiftNo
+                            shiftNo = tempStore
+                        }else{
+                            shiftNo = matrix[i][k]
+                        }
+                        //printMatrix(matrix: matrix)
+                        if i == m-1-k {
+                            direction = .Right
+                        }
                     }
-                    //printMatrix(matrix: matrix)
-                    if i == m-1-k {
-                        direction = .Right
-                    }
+                }else {
+                    direction = .Right
                 }
                 break
             case .Left:
-                for i in (k...n-2-k).reversed() {
-                    let nextLeft = i
-                    tempStore = matrix[k][nextLeft]
-                    matrix[k][nextLeft] = shiftNo
-                    shiftNo = tempStore
-                    //printMatrix(matrix: matrix)
-                    if i == k {
-                        direction = .Down
-                        shiftNo = -10
+                let low = k
+                let up = n-2-k
+                if low<=up{
+                    for i in (low...up).reversed() {
+                        let nextLeft = i
+                        if shiftNo > -1{
+                            tempStore = matrix[k][nextLeft]
+                            matrix[k][nextLeft] = shiftNo
+                            shiftNo = tempStore
+                        }else{
+                            shiftNo = matrix[k][i]
+                        }
+                        //printMatrix(matrix: matrix)
+                        if i == k {
+                            direction = .Down
+                            shiftNo = -10
+                        }
                     }
+                } else {
+                    direction = .Down
                 }
                 break
             case .Right:
-                for i in 1+k..<n-k{
-                    let nextRight = i
-                    tempStore = matrix[m-1-k][nextRight]
-                    matrix[m-1-k][nextRight] = shiftNo
-                    shiftNo = tempStore
-                    //printMatrix(matrix: matrix)
-                    if i == n-1-k {
-                        direction = .Up
+                let low = k+1
+                let up = n-k
+                if low<up{
+                    for i in low..<up{
+                        let nextRight = i
+                        if shiftNo > -1{
+                            tempStore = matrix[m-1-k][nextRight]
+                            matrix[m-1-k][nextRight] = shiftNo
+                            shiftNo = tempStore
+                        }else{
+                            shiftNo = matrix[i][k]
+                        }
+                        //printMatrix(matrix: matrix)
+                        if i == n-1-k {
+                            direction = .Up
+                        }
                     }
+                } else {
+                    direction = .Up
                 }
                 break
             }
         }
-        //printMatrix(matrix: matrix)
+        printMatrix(matrix: matrix)
     }
     printMatrix(matrix: matrix)
 }
@@ -113,5 +151,6 @@ for i in 0..<m{
     }
 }
 
-matrixRotation(matrix: matrix, r: 2)
+matrixRotation(matrix: matrix, r: 1)
+
 
