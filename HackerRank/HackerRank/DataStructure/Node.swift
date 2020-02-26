@@ -11,4 +11,5 @@ import Cocoa
 class Node {
     var value: Int?
     var next: Node?
+    var prev: Node?
 }

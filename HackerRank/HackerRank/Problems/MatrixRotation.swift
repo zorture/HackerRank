@@ -28,9 +28,12 @@ struct MatrixRange {
 class MatrixRotation: BaseClass {
     
     var direction: Direction = .Down
-    var matrix: [[Int]] = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+    //var matrix: [[Int]] = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+    var matrix: [[Int]] = [[1,2,3,4,5],[6,7,8,9,10],[10,11,12,13,15],[16,17,18,19,20]]
+    //var matrix: [[Int]] = [[1,2,3,4,5],[6,7,8,9,10],[10,11,12,13,15]]
     var newMatrix: [[Int]]?
-    class override func run() {
+    
+    class func matrixRotation(matrix: [[Int]], r: Int) -> Void {
         let obj = MatrixRotation()
         
 
@@ -53,14 +56,14 @@ class MatrixRotation: BaseClass {
         
         guard var rotatedNodeRoot1 = node1 else { return }
         for _ in 0..<rotate {
-            if let tempNode = rotatedNodeRoot1.next as? MatrixNode {
+            if let tempNode = rotatedNodeRoot1.prev as? MatrixNode {
                 rotatedNodeRoot1 = tempNode
             }
         }
         
         guard var rotatedNodeRoot2 = node2 else { return }
         for _ in 0..<rotate {
-            if let tempNode = rotatedNodeRoot2.next as? MatrixNode {
+            if let tempNode = rotatedNodeRoot2.prev as? MatrixNode {
                 rotatedNodeRoot2 = tempNode
             }
         }
@@ -135,10 +138,7 @@ class MatrixRotation: BaseClass {
         }
     }
     
-    // Complete the matrixRotation function below.
-    func matrixRotation(matrix: [[Int]], r: Int) -> Void {
 
-    }
 
     
     func createLinkList(rowRange: MatrixRange, colRange: MatrixRange) -> MatrixNode? {
@@ -161,6 +161,7 @@ class MatrixRotation: BaseClass {
                     tempNode = node
                 } else {
                     tempNode?.next = node
+                    node.prev = tempNode
                     tempNode = node
                 }
             } else {
@@ -196,6 +197,7 @@ class MatrixRotation: BaseClass {
                     direction = .Down
                     condition = false
                     tempNode?.next = rootNode
+                    rootNode?.prev = tempNode
                 }
             }
         }
