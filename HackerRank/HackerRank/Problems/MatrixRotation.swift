@@ -8,6 +8,12 @@
 
 import Cocoa
 
+class Node {
+    var value: Int?
+    var next: Node?
+    var prev: Node?
+}
+
 class MatrixNode: Node {
     var isStart = false
 }
@@ -25,18 +31,16 @@ struct MatrixRange {
     
 }
 
-class MatrixRotation: BaseClass {
+class MatrixRotation {
     
     var direction: Direction = .Down
-    //var matrix: [[Int]] = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
-    var matrix: [[Int]] = [[1,2,3,4,5],[6,7,8,9,10],[10,11,12,13,15],[16,17,18,19,20]]
-    //var matrix: [[Int]] = [[1,2,3,4,5],[6,7,8,9,10],[10,11,12,13,15]]
+    var matrix: [[Int]] = [[122,2,3,4,5],[6,7,8,9,10],[10,11,12,13,15]]
     var newMatrix: [[Int]]?
     
     class func matrixRotation(matrix: [[Int]], r: Int) -> Void {
         let obj = MatrixRotation()
+        obj.matrix = matrix
         
-
         for i in obj.matrix {
             for j in i {
                 print(j, terminator: " ")
@@ -44,6 +48,7 @@ class MatrixRotation: BaseClass {
             print(" ")
         }
         
+        print("\n")
         let rowRange = MatrixRange(min: 0, max: obj.matrix.count)
         let colRange = MatrixRange(min: 0, max: obj.matrix.first?.count ?? 0)
         let node1 = obj.createLinkList(rowRange: rowRange, colRange: colRange)
@@ -52,7 +57,7 @@ class MatrixRotation: BaseClass {
         let colRange2 = MatrixRange(min: 1, max: obj.matrix.first!.count - 1 )
         let node2 = obj.createLinkList(rowRange: rowRange2, colRange: colRange2)
         
-        let rotate = 4
+        let rotate = r
         
         guard var rotatedNodeRoot1 = node1 else { return }
         for _ in 0..<rotate {
@@ -73,9 +78,7 @@ class MatrixRotation: BaseClass {
         
         obj.createMatrix(node: rotatedNodeRoot1, rowRange: rowRange, colRange: colRange)
         obj.createMatrix(node: rotatedNodeRoot2, rowRange: rowRange2, colRange: colRange2)
-        
-        print("\n\n\n")
-        
+
         for i in obj.newMatrix! {
             for j in i {
                 print(j, terminator: " ")
@@ -155,7 +158,6 @@ class MatrixRotation: BaseClass {
             if !skip {
                 let node = MatrixNode()
                 node.value = matrix[counterRow][counterCol]
-                //print("\(node.value ?? -1)")
                 if rootNode == nil {
                     rootNode = node
                     tempNode = node
@@ -184,7 +186,7 @@ class MatrixRotation: BaseClass {
                     direction = .Up
                 }
             case .Up:
-                if counterRow > rowRange.min {
+                if counterRow > rowRange.min + 1{
                     counterRow -= 1
                 } else {
                     skip = true

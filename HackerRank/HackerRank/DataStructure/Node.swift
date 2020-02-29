@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class Node {
+class Node1 {
     var value: Int?
     var next: Node?
     var prev: Node?
